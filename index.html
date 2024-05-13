@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Benutzerverwaltung</title>
+</head>
+<body>
+<h1>Benutzerverwaltung</h1>
+
+<!-- Ein Formular zum Hinzufügen eines neuen Benutzers -->
+<form id="userForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br>
+    <label for="email">E-Mail:</label>
+    <input type="email" id="email" name="email" required><br>
+    <button type="submit">Benutzer hinzufügen</button>
+</form>
+
+<!-- Bereich zur Anzeige der Liste von Benutzern -->
+<div id="userList">
+    <h2>Benutzerliste</h2>
+    <ul id="users"></ul>
+</div>
+
+<script>
+    // Klasse für ein Benutzerobjekt
+    class Benutzer {
+        constructor(name, email) {
+            this.name = name;
+            this.email = email;
+        }
+
+        // Methode zur Umwandlung des Benutzerobjekts in JSON-Format
+        toString() {
+            return JSON.stringify(this);
+        }
+    }
+
+    // Klasse zur Verwaltung von Benutzern
+    class Benutzerverwaltung {
+        constructor() {
+            this.benutzer = [];
+        }
+
+        // Methode zum Hinzufügen eines Benutzers
+        benutzerHinzufuegen(benutzer) {
+            this.benutzer.push(benutzer);
+            console.log(benutzer.toString()); // Ausgabe des Benutzers in der Konsole
+            this.benutzerAnzeigen();
+        }
+
+        // Methode zur Anzeige der Benutzerliste auf der Webseite
+        benutzerAnzeigen() {
+            const benutzerListe = document.getElementById("users");
+            benutzerListe.innerHTML = "";
+            this.benutzer.forEach(benutzer => {
+                const li = document.createElement("li");
+                li.textContent = benutzer.toString();
+                benutzerListe.appendChild(li);
+            });
+        }
+    }
+
+    // Neue Instanz der Benutzerverwaltungsklasse erstellen
+    const benutzerverwaltung = new Benutzerverwaltung();
+    const benutzerFormular = document.getElementById("userForm");
+
+    // Event-Listener für das Formular zum Hinzufügen von Benutzern
+    benutzerFormular.addEventListener("submit", function(event) {
+        event.preventDefault(); // Standardverhalten des Formulars unterbinden
+
+        // Benutzerdaten aus dem Formular lesen
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+
+        // Neues Benutzerobjekt erstellen
+        const benutzer = new Benutzer(name, email);
+
+        // Benutzer der Benutzerverwaltung hinzufügen
+        benutzerverwaltung.benutzerHinzufuegen(benutzer);
+
+        // Formularfelder leeren
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+    });
+</script>
+
+</body>
+</html>
